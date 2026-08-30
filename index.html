@@ -154,6 +154,29 @@
             emailDestinatario: emailDestino
         };
 
+        statusDiv.textContent = 'Enviando...';
+        statusDiv.className = '';
+
+        // Envia os dados para o servidor Java
+        fetch('http://localhost:8080/api/notificar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(response => {
+                if(response.ok) {
+                    statusDiv.textContent = 'Notificação enviada com sucesso!';
+                    statusDiv.className = 'success';
+                } else {
+                    throw new Error('Erro no servidor');
+                }
+            })
+            .catch(error => {
+                statusDiv.textContent = 'Erro ao enviar. Verifique se o Java está rodando.';
+                statusDiv.className = 'error';
+                console.error(error);
+            });
+
         console.log("Dados prontos para o backend:", payload);
 
         statusDiv.textContent = 'Aguardando implementação do Backend em Java...';
