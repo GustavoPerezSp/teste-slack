@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Notificações</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4A154B; /* Cor do Slack */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #350d36;
+        }
+        #statusMessage {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .success { color: #2e7d32; }
+        .error { color: #d32f2f; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Enviar Notificação</h2>
+
+    <form id="notificationForm">
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="sendSlack" checked> Slack
+            </label>
+            <label>
+                <input type="checkbox" id="sendEmail"> E-mail
+            </label>
+        </div>
+
+        <div class="form-group" id="emailGroup" style="display: none;">
+            <label for="emailDestino">E-mail de Destino:</label>
+            <input type="email" id="emailDestino" placeholder="exemplo@dominio.com">
+        </div>
+
+        <div class="form-group">
+            <label for="mensagem">Mensagem:</label>
+            <textarea id="mensagem" placeholder="Digite sua mensagem aqui..." required></textarea>
+        </div>
+
+        <button type="submit">Enviar</button>
+        <div id="statusMessage"></div>
+    </form>
+</div>
+
+<script>
+    // Mostrar/esconder o campo de e-mail dependendo do checkbox
+    const emailCheckbox = document.getElementById('sendEmail');
+    const emailGroup = document.getElementById('emailGroup');
+
+    emailCheckbox.addEventListener('change', function() {
+        emailGroup.style.display = this.checked ? 'block' : 'none';
+    });
+
+    // Simular o envio do formulário (preparado para o Java)
+    document.getElementById('notificationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const message = document.getElementById('mensagem').value;
+        const sendSlack = document.getElementById('sendSlack').checked;
+        const sendEmail = document.getElementById('sendEmail').checked;
+        const emailDestino = document.getElementById('emailDestino').value;
+        const statusDiv = document.getElementById('statusMessage');
+
+        if (!sendSlack && !sendEmail) {
+            statusDiv.textContent = 'Selecione pelo menos um canal de envio.';
+            statusDiv.className = 'error';
+            return;
+        }
+
+        // AQUI É ONDE VAMOS CONECTAR COM O JAVA DEPOIS
+        // Exemplo de como os dados serão montados:
+        const payload = {
+            mensagem: message,
+            enviarSlack: sendSlack,
+            enviarEmail: sendEmail,
+            emailDestinatario: emailDestino
+        };
+
+        console.log("Dados prontos para o backend:", payload);
+
+        statusDiv.textContent = 'Aguardando implementação do Backend em Java...';
+        statusDiv.className = 'success';
+    });
+</script>
+</body>
+</html>
